@@ -173,6 +173,8 @@ namespace baitapapinetcore.Services.CatrgorySevice
             }
 
             // Chuyển đổi đối tượng Category thành đối tượng ViewCategory
+            // sdshdgsajdqwghew
+            //dsdsadas
             var viewCategory = new ViewCategory
             {
                 Id = category.Id,
