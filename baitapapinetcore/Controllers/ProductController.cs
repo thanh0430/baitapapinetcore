@@ -43,11 +43,12 @@ namespace baitapapinetcore.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddProduct(ViewProducts viewProducts)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddProduct([FromForm] ViewProducts viewProducts, [FromForm] IFormFile file)
         {
             try 
             {
-                var resuilt = await _productRepository.AddAsync(viewProducts);
+                var resuilt = await _productRepository.AddAsync(viewProducts, file);
                 return Ok(resuilt);
             }
             catch(Exception ex)
@@ -57,12 +58,13 @@ namespace baitapapinetcore.Controllers
     
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(ViewProducts viewProducts)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProduct([FromForm] ViewProducts viewProducts, [FromForm] IFormFile file, int id)
         {
             try 
             {          
                 
-                await _productRepository.UpdateAsync(viewProducts);
+                await _productRepository.UpdateAsync(viewProducts, file, id);
                 return Ok(); 
             }
             catch (Exception ex)

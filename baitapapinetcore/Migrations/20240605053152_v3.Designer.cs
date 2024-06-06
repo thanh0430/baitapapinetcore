@@ -12,8 +12,8 @@ using baitapapinetcore.Models;
 namespace baitapapinetcore.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240603043328_v1")]
-    partial class v1
+    [Migration("20240605053152_v3")]
+    partial class v3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,12 +52,12 @@ namespace baitapapinetcore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SCCCD")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SCCCD")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -87,6 +87,40 @@ namespace baitapapinetcore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("baitapapinetcore.Models.Order", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("DiaChi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("KhachHangSDT")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NgayBan")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TenKH")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TongTien")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TrangThai")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("baitapapinetcore.Models.Product", b =>

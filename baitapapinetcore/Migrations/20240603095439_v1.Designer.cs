@@ -12,8 +12,8 @@ using baitapapinetcore.Models;
 namespace baitapapinetcore.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240603045317_v3")]
-    partial class v3
+    [Migration("20240603095439_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

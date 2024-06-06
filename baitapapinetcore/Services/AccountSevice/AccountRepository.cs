@@ -105,9 +105,9 @@ namespace baitapapinetcore.Services.AccountSevice
             }
         }
 
-        public async Task UpdateAsync(ViewAccount viewAccount)
+        public async Task UpdateAsync(ViewAccount viewAccount, int id)
         {
-            var result = await _dbContext.Accounts.SingleOrDefaultAsync(p => p.Id == viewAccount.Id);
+            var result = await _dbContext.Accounts.SingleOrDefaultAsync(p => p.Id == id);
             if (result == null)
             {
                 throw new Exception("Bạn đã nhập sai ID");
@@ -132,7 +132,7 @@ namespace baitapapinetcore.Services.AccountSevice
                 await _dbContext.SaveChangesAsync();
             }
         }
-
+       
         public async Task<string> LoginAsync(ViewAccount ViewAccount)
         {
             var authenClaims = new List<Claim>

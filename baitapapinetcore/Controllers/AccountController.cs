@@ -55,11 +55,11 @@ namespace baitapapinetcore.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount(ViewAccount viewAccount)
+        public async Task<IActionResult> UpdateAccount(ViewAccount viewAccount, int id)
         {
             try
             {
-                await _accountRepository.UpdateAsync(viewAccount);
+                await _accountRepository.UpdateAsync(viewAccount, id);
                 return Ok();
             }
             catch (Exception ex)

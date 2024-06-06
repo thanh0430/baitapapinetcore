@@ -10,11 +10,11 @@ namespace baitapapinetcore.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
         [Required]
-        public string TenSanPham { get; set; }
+        public string? TenSanPham { get; set; }
         [Required]
         public double GiaBan { get; set; }
         [Required]
-        public string Anh { get; set; }
+        public string? Anh { get; set; }
         [Required]
         public int TrangThai { get; set; }
         [Required]

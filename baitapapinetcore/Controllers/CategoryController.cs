@@ -100,7 +100,8 @@ namespace baitapapinetcore.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] ViewCategory ViewCategory)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateCategory([FromForm] ViewCategory ViewCategory, [FromForm] IFormFile file)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +110,7 @@ namespace baitapapinetcore.Controllers
 
             try
             {
-                var result = await _categoryRepository.AddAsync(ViewCategory);
+                var result = await _categoryRepository.AddAsync(ViewCategory, file);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -119,11 +120,12 @@ namespace baitapapinetcore.Controllers
         }
        
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(ViewCategory viewCategory)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateCategory([FromForm] ViewCategory viewCategory, int id, [FromForm] IFormFile file)
         {
             try
             {
-                await _categoryRepository.UpdateAsync(viewCategory);
+                await _categoryRepository.UpdateAsync(viewCategory, id, file);
                 return Ok();
             } 
             catch (Exception ex)

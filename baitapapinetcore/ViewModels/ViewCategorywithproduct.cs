@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace baitapapinetcore.ViewModels
+﻿namespace baitapapinetcore.ViewModels
 {
-    public class ViewCategory
+    public class ViewCategorywithproduct
     {
         public int Id { get; set; }
         public string producttype { get; set; }
         public string CategoryName { get; set; }
         public string Image { get; set; }
-        //public List<ViewProducts>? Products { get; set; }
+        public List<ViewProducts>? Products { get; set; }
     }
 }

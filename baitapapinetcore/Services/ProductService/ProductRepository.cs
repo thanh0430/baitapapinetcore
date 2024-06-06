@@ -1,5 +1,6 @@
 ﻿using baitapapinetcore.Models;
 using baitapapinetcore.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace baitapapinetcore.Services.ProductService
@@ -12,8 +13,23 @@ namespace baitapapinetcore.Services.ProductService
             _context =  context;
         }
 
-        public async Task<ViewProducts> AddAsync(ViewProducts viewProduct)
+        public async Task<ViewProducts> AddAsync(ViewProducts viewProduct, IFormFile file)
         {
+            string fname = DateTime.Now.ToString("yyyyMMddssffff") + "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
+           
+                if (file.Length > 0)
+                {
+
+                    string path2 = Path.Combine(@"E:\baitapapinetcore\baitapapinetcore\Image\" + fname);
+
+
+                    using (var stream2 = System.IO.File.Create(path2))
+                    {
+
+                        file.CopyTo(stream2);
+                    }
+                    viewProduct.Anh = fname;
+                }            
             var newProduct = new Product
             {
                 TenSanPham = viewProduct.TenSanPham,
@@ -69,7 +85,6 @@ namespace baitapapinetcore.Services.ProductService
                   SoLuong = sl.SoLuong,
                   TrangThai = sl.TrangThai,
               }).ToListAsync();
-
         }
 
         public async Task<ViewProducts> GetByIdAsync(int id)
@@ -96,28 +111,51 @@ namespace baitapapinetcore.Services.ProductService
             }
         }
 
-        public async Task UpdateAsync(ViewProducts viewProduct)
+        public async Task UpdateAsync(ViewProducts viewProduct, IFormFile file, int id)
         {
-            var resuilt = await _context.Products.SingleOrDefaultAsync(p => p.Id == viewProduct.Id);
-            if (resuilt == null)
+            var result = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
+            if (result == null)
             {
-                throw new Exception("ID không tồn tại");
-            }
-            var categoryExists = await _context.Categories.AnyAsync(c => c.Id == viewProduct.CategoryID);
-            if (!categoryExists)
-            {
-                throw new Exception("ID danh mục không tồn tại");
+                throw new ArgumentException("Không tồn tại ID", nameof(id));
             }
 
-            resuilt.TenSanPham = viewProduct.TenSanPham;
-            resuilt.GiaBan = viewProduct.GiaBan;
-            resuilt.Anh = viewProduct.Anh;
-            resuilt.MoTa = viewProduct.MoTa;
-            resuilt.CategoryID = viewProduct.CategoryID;
-            resuilt.SoLuong = viewProduct.SoLuong;
-            resuilt.TrangThai = viewProduct.TrangThai;
+            if (file != null && file.Length > 0)
+            {
 
-            await _context.SaveChangesAsync();
+                string fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmssfff")}_{file.FileName}";
+
+                try
+                {
+                    string path = Path.Combine(@"E:\baitapapinetcore\baitapapinetcore\Image", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    viewProduct.Anh = fileName;
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi nếu gặp phải vấn đề khi lưu file
+                    throw new Exception("Lỗi khi lưu file", ex);
+                }
+            }
+            result.TenSanPham = viewProduct.TenSanPham;
+            result.GiaBan = viewProduct.GiaBan;
+            result.MoTa = viewProduct.MoTa;
+            result.CategoryID = viewProduct.CategoryID;
+            result.SoLuong = viewProduct.SoLuong;
+            result.TrangThai = viewProduct.TrangThai;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Lỗi khi cập nhật thông tin sản phẩm", ex);
+            }
         }
 
     }

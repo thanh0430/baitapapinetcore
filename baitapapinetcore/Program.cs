@@ -1,8 +1,10 @@
 using baitapapinetcore.Models;
 using baitapapinetcore.Services.AccountSevice;
 using baitapapinetcore.Services.CatrgorySevice;
+using baitapapinetcore.Services.OrderSevice;
 using baitapapinetcore.Services.ProductService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -17,9 +19,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddDataAnnotationsLocalization();
+
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,19 +41,19 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
     };
 });
+
+
 builder.Services.AddCors(option => option.AddPolicy("PhoneStorePolicy", policy =>
 {
     policy
         .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader();
-
 }));
 
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"));
-    options.UseLazyLoadingProxies(); // Enable lazy loading
 });
 
 var app = builder.Build();
@@ -73,9 +77,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-
 app.Run();

@@ -4,12 +4,12 @@
 
 namespace baitapapinetcore.Migrations
 {
-    public partial class v2 : Migration
+    public partial class v4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Role",
+                name: "SCCCD",
                 table: "Account",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -20,7 +20,7 @@ namespace baitapapinetcore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "Role",
+                name: "SCCCD",
                 table: "Account",
                 type: "int",
                 nullable: false,

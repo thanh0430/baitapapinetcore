@@ -1,4 +1,5 @@
-﻿using baitapapinetcore.ViewModels;
+﻿using baitapapinetcore.Models;
+using baitapapinetcore.ViewModels;
 using System;
 
 namespace baitapapinetcore.Services.CatrgorySevice
@@ -7,11 +8,11 @@ namespace baitapapinetcore.Services.CatrgorySevice
     {
         Task<List<ViewCategory>> GetAllAsync();
         Task<ViewCategory> GetByIdAsync(int id);
-        Task<ViewCategory> AddAsync(ViewCategory ViewCategory);
-        Task UpdateAsync(ViewCategory ViewCategory);
+        Task<ViewCategory> AddAsync(ViewCategory ViewCategory, IFormFile file);
+        Task UpdateAsync(ViewCategory ViewCategory, int id, IFormFile file);
         Task DeleteAsync(int id);
-        Task <List<ViewCategory>> GetCategoryWithProducts();
-        Task<ViewCategory> GetCategoryWithProductsLazyloading(int id);
-        Task<ViewCategory> GetCategoryWithProductsExplicitly(int id);
+        Task <List<ViewCategorywithproduct>> GetCategoryWithProducts();
+        Task<ViewCategorywithproduct> GetCategoryWithProductsLazyloading(int id);
+        Task<ViewCategorywithproduct> GetCategoryWithProductsExplicitly(int id);
     }
 }

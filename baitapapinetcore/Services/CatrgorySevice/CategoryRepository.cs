@@ -1,7 +1,6 @@
 ﻿using baitapapinetcore.Models;
 using baitapapinetcore.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace baitapapinetcore.Services.CatrgorySevice
 {
@@ -14,24 +13,40 @@ namespace baitapapinetcore.Services.CatrgorySevice
             _dbcontext = dbContext;
         }
 
-        public async Task<ViewCategory> AddAsync(ViewCategory ViewCategory)
+        public async Task<ViewCategory> AddAsync(ViewCategory ViewCategory, IFormFile file)
         {
+
+            if (file == null || file.Length == 0)
+            {
+                throw new Exception("file không tồn tại");
+            }
+
+            string extension = Path.GetExtension(file.FileName);
+            string fileName = DateTime.Now.ToString("yyyyMMddssffff") + extension;
+            string filePath = Path.Combine(@"E:\baitapapinetcore\baitapapinetcore\Image\", fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            ViewCategory.Image = fileName;
             var newCategory = new Category
             {
                 producttype = ViewCategory.producttype,
                 CategoryName = ViewCategory.CategoryName,
                 Image = ViewCategory.Image
             };
+
             _dbcontext.Categories.Add(newCategory);
             await _dbcontext.SaveChangesAsync();
 
             return new ViewCategory
             {
-                
+                Id = newCategory.Id,
+                producttype = newCategory.producttype,
                 CategoryName = newCategory.CategoryName,
-                Image = newCategory.Image,
-                producttype = newCategory.producttype
-
+                Image = newCategory.Image
             };
         }
 
@@ -77,23 +92,35 @@ namespace baitapapinetcore.Services.CatrgorySevice
             }
         }
 
-        public async Task UpdateAsync(ViewCategory ViewCategory)
+        public async Task UpdateAsync(ViewCategory ViewCategory, int id, IFormFile file)
         {
-            var resuilt = await _dbcontext.Categories.SingleOrDefaultAsync(p =>p.Id == ViewCategory.Id);
-            if (resuilt == null)
+            var result = await _dbcontext.Categories.SingleOrDefaultAsync(p => p.Id == id);
+            if (result == null)
             {
                 throw new Exception("Không tồn tại ID");
             }
-            else
+
+            if (file != null && file.Length > 0)
             {
-                resuilt .CategoryName = ViewCategory.CategoryName;
-                resuilt.Image = ViewCategory.Image;
-                resuilt.producttype = ViewCategory.producttype;
-                await _dbcontext.SaveChangesAsync();
+                string extension = Path.GetExtension(file.FileName);
+                string fileName = DateTime.Now.ToString("yyyyMMddssffff") + extension;
+                string filePath = Path.Combine(@"E:\baitapapinetcore\baitapapinetcore\Image\", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                ViewCategory.Image = fileName;
             }
+
+            result.CategoryName = ViewCategory.CategoryName;
+            result.Image = ViewCategory.Image ?? result.Image;
+            result.producttype = ViewCategory.producttype;
+
+            await _dbcontext.SaveChangesAsync();
         }
 
-        public async Task<ViewCategory> GetCategoryWithProductsExplicitly(int id)
+        public async Task<ViewCategorywithproduct> GetCategoryWithProductsExplicitly(int id)
         {
             var category = await _dbcontext.Categories.SingleOrDefaultAsync(c => c.Id == id);
 
@@ -102,10 +129,10 @@ namespace baitapapinetcore.Services.CatrgorySevice
                 throw new Exception("Không tồn tại ID");
             }
 
-            // Explicitly load the related products
+
             _dbcontext.Entry(category).Collection(c => c.Products).Load();
 
-            var viewCategory = new ViewCategory
+            var viewCategory = new ViewCategorywithproduct
             {
                 Id = category.Id,
                 producttype = category.producttype,
@@ -127,21 +154,20 @@ namespace baitapapinetcore.Services.CatrgorySevice
             return viewCategory;
         }
 
-        public async Task<List<ViewCategory>> GetCategoryWithProducts()
+        public async Task<List<ViewCategorywithproduct>> GetCategoryWithProducts()
         {
             
             var categories = await _dbcontext.Categories
-                .Include(c => c.Products)
-                    .ThenInclude(p => p.Category) // Include thông tin liên quan của sản phẩm
+                .Include(c => c.Products)                
                 .ToListAsync();
 
             if (categories == null)
             {
                 throw new Exception("Không tồn tại danh mục nào");
-            }
+            } 
 
             // Trả về danh sách các đối tượng ViewCategory
-            var viewCategories = categories.Select(category => new ViewCategory
+            var viewCategories = categories.Select(category => new ViewCategorywithproduct
             {
                 Id = category.Id,
                 producttype = category.producttype,
@@ -163,7 +189,7 @@ namespace baitapapinetcore.Services.CatrgorySevice
             return viewCategories;
         }
 
-        public async Task<ViewCategory> GetCategoryWithProductsLazyloading(int id)
+        public async Task<ViewCategorywithproduct> GetCategoryWithProductsLazyloading(int id)
         {
             var category = await _dbcontext.Categories.FindAsync(id);
 
@@ -173,9 +199,8 @@ namespace baitapapinetcore.Services.CatrgorySevice
             }
 
             // Chuyển đổi đối tượng Category thành đối tượng ViewCategory
-            // sdshdgsajdqwghew
-            //dsdsadas
-            var viewCategory = new ViewCategory
+
+            var viewCategory = new ViewCategorywithproduct
             {
                 Id = category.Id,
                 producttype = category.producttype,
@@ -193,7 +218,6 @@ namespace baitapapinetcore.Services.CatrgorySevice
                     SoLuong = p.SoLuong
                 }).ToList()
             };
-
             return viewCategory;
         }
     }

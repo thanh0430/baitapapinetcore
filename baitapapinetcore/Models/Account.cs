@@ -17,7 +17,7 @@ namespace baitapapinetcore.Models
         public string? Address { get; set; }
         [Required]
         [RegularExpression(@"^\d{12}$", ErrorMessage = "SCCCD của bạn nhập chưa đúng.")]
-        public int  SCCCD { get; set; }
+        public string  SCCCD { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Email cảu bạn nhập chưa đúng định dạng.")]
         public string Email { get; set; }// Sử dụng để làm tk đăng nhập
