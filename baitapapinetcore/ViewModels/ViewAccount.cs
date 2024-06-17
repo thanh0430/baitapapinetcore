@@ -8,7 +8,10 @@ namespace baitapapinetcore.ViewModels
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Address { get; set; }
-        public string SCCCD { get; set; }
+        public string? SCCCD { get; set; }
+        public string? PhoneNumber { get; set; }
+/*        public string GoogleId { get; set; }
+       public string Avatar {  get; set; }*/
         public string Email { get; set; }// Sử dụng để làm tk đăng nhập
         public string Password { get; set; }
         public string? Role { get; set; } //1: admin, 2:USER

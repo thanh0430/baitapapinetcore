@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using baitapapinetcore.Models;
 
@@ -11,9 +12,10 @@ using baitapapinetcore.Models;
 namespace baitapapinetcore.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611014919_v8")]
+    partial class v8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,6 +55,12 @@ namespace baitapapinetcore.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -202,75 +210,6 @@ namespace baitapapinetcore.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("baitapapinetcore.Models.Voucher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdCreator")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VoucherCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VoucherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VoucherType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdCreator");
-
-                    b.ToTable("Voucher");
-                });
-
-            modelBuilder.Entity("baitapapinetcore.Models.VoucherForAcc", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<DateTime?>("RedeemedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RedeemedStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("voucherId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("voucherId");
-
-                    b.ToTable("VoucherForAcc");
-                });
-
             modelBuilder.Entity("baitapapinetcore.Models.OrderDetail", b =>
                 {
                     b.HasOne("baitapapinetcore.Models.Order", "Order")
@@ -291,28 +230,6 @@ namespace baitapapinetcore.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("baitapapinetcore.Models.Voucher", b =>
-                {
-                    b.HasOne("baitapapinetcore.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("IdCreator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("baitapapinetcore.Models.VoucherForAcc", b =>
-                {
-                    b.HasOne("baitapapinetcore.Models.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("voucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("baitapapinetcore.Models.Category", b =>

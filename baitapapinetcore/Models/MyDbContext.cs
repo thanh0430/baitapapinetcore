@@ -11,6 +11,9 @@ namespace baitapapinetcore.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<VoucherForAcc> VoucherForAccs { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Bỏ qua hoặc ghi log thông báo NavigationBaseIncludeIgnored

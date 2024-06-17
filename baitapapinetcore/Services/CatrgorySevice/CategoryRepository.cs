@@ -165,8 +165,6 @@ namespace baitapapinetcore.Services.CatrgorySevice
             {
                 throw new Exception("Không tồn tại danh mục nào");
             } 
-
-            // Trả về danh sách các đối tượng ViewCategory
             var viewCategories = categories.Select(category => new ViewCategorywithproduct
             {
                 Id = category.Id,

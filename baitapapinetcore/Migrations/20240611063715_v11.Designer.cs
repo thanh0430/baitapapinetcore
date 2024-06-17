@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using baitapapinetcore.Models;
 
@@ -11,9 +12,10 @@ using baitapapinetcore.Models;
 namespace baitapapinetcore.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611063715_v11")]
+    partial class v11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,8 +241,6 @@ namespace baitapapinetcore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCreator");
-
                     b.ToTable("Voucher");
                 });
 
@@ -266,7 +266,8 @@ namespace baitapapinetcore.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("voucherId");
+                    b.HasIndex("voucherId")
+                        .IsUnique();
 
                     b.ToTable("VoucherForAcc");
                 });
@@ -293,22 +294,11 @@ namespace baitapapinetcore.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("baitapapinetcore.Models.Voucher", b =>
-                {
-                    b.HasOne("baitapapinetcore.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("IdCreator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
             modelBuilder.Entity("baitapapinetcore.Models.VoucherForAcc", b =>
                 {
                     b.HasOne("baitapapinetcore.Models.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("voucherId")
+                        .WithOne("VoucherForAcc")
+                        .HasForeignKey("baitapapinetcore.Models.VoucherForAcc", "voucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -323,6 +313,11 @@ namespace baitapapinetcore.Migrations
             modelBuilder.Entity("baitapapinetcore.Models.Order", b =>
                 {
                     b.Navigation("OrderDetail");
+                });
+
+            modelBuilder.Entity("baitapapinetcore.Models.Voucher", b =>
+                {
+                    b.Navigation("VoucherForAcc");
                 });
 #pragma warning restore 612, 618
         }

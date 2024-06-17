@@ -21,11 +21,8 @@ namespace baitapapinetcore.Services.ProductService
                 {
 
                     string path2 = Path.Combine(@"E:\baitapapinetcore\baitapapinetcore\Image\" + fname);
-
-
                     using (var stream2 = System.IO.File.Create(path2))
                     {
-
                         file.CopyTo(stream2);
                     }
                     viewProduct.Anh = fname;
@@ -55,8 +52,6 @@ namespace baitapapinetcore.Services.ProductService
                 TrangThai = newProduct.TrangThai,
             };
         }
-
-
         public async Task DeleteAsync(int id)
         {
             var resuilt = await _context.Products.SingleOrDefaultAsync(p=> p.Id == id);
@@ -86,7 +81,6 @@ namespace baitapapinetcore.Services.ProductService
                   TrangThai = sl.TrangThai,
               }).ToListAsync();
         }
-
         public async Task<ViewProducts> GetByIdAsync(int id)
         {
             var resuilt = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
@@ -110,7 +104,6 @@ namespace baitapapinetcore.Services.ProductService
                 };
             }
         }
-
         public async Task UpdateAsync(ViewProducts viewProduct, IFormFile file, int id)
         {
             var result = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);

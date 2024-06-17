@@ -9,5 +9,6 @@ namespace baitapapinetcore.Services.ProductService
         Task<ViewProducts> AddAsync(ViewProducts viewProduct, IFormFile file);
         Task UpdateAsync(ViewProducts viewProduct, IFormFile file, int id);
         Task DeleteAsync(int id);
+   
     }
 }

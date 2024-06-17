@@ -42,18 +42,20 @@ namespace baitapapinetcore.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddOrder(ViewOrder viewOrder)
+        public async Task<IActionResult> AddOrder(List<CreateOrderRequest> createOrderRequests)
         {
             try
             {
-                var resuilt = await _orderRepository.AddAsync(viewOrder);
-                return Ok(resuilt);
+                
+                var result = await _orderRepository.AddAsync(createOrderRequests);
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrder(int id,  ViewOrder ViewOrder)
         {
@@ -76,6 +78,81 @@ namespace baitapapinetcore.Controllers
                 return Ok();
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("{id}/GetOrderWithOrderDetail")]
+        public async Task<IActionResult> GetOrderWithOrderDetail(int id)
+        {
+            var resuilt = await _orderRepository.GetOrderWithOrderDetail(id);
+            return Ok(resuilt);
+        }
+        [HttpGet("/GetOrderby")]
+        public async Task<IActionResult> GetOrderby()
+        {
+            try
+            {
+                var resuilt = await _orderRepository.GetOrderby();
+                return Ok(resuilt);
+            }
+           catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("/GetOrderbystatus")]
+        public async Task<IActionResult> GetOrderbystatus()
+        {
+      
+            try
+            {
+                var resuilt = await _orderRepository.GetOrderbystatus();
+                return Ok(resuilt);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("/GetOrderchart")]
+        public async Task<IActionResult> GetOrderchart()
+        {
+        
+            try
+            {
+                var resuilt = await _orderRepository.GetOrderchart();
+                return Ok(resuilt);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("/GetGellinPproducts")]
+        public async Task<IActionResult> GetGellinPproducts()
+        {
+         
+            try
+            {
+                var resuilt = await _orderRepository.GetGellinPproducts();
+                return Ok(resuilt);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("/GetLatestProduct")]
+        public async Task<IActionResult> GetLatestProduct()
+        {
+       
+            try
+            {
+                var resuilt = await _orderRepository.GetLatestProduct();
+                return Ok(resuilt);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

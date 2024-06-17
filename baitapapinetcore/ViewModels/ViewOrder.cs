@@ -9,6 +9,7 @@
         public int TrangThai { get; set; }
         public string TenKH { get; set; }
         public string DiaChi { get; set; }
-       // public List<ViewProducts>? Products { get; set; }
+
+
     }
 }

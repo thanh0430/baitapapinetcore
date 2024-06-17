@@ -15,6 +15,6 @@ namespace baitapapinetcore.Models
         public int TrangThai { get; set; }
         public string TenKH { get; set; }
         public string DiaChi { get; set; }
-        //public virtual ICollection<Product>? Products { get; set; }
+        public virtual ICollection<OrderDetail>? OrderDetail  {get; set; }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using baitapapinetcore.Services.AccountSevice;
 using baitapapinetcore.ViewModels;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace baitapapinetcore.Controllers
 {
@@ -124,5 +127,20 @@ namespace baitapapinetcore.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet("LoginGG")]
+        //public async Task<IActionResult> SignInWithGoogle(ClaimsPrincipal principal)
+        //{
+        //    var user = HttpContext.User;
+        //    if (user != null)
+        //    {
+        //        var properties = await _accountRepository.AuthenticateGoogleUserAsync(user);
+        //        return Ok(properties);
+        //    }
+        //    else
+        //    {
+        //        // Xử lý trường hợp người dùng không được xác thực
+        //        return Unauthorized();
+        //    }
+        //}
     }
 }
